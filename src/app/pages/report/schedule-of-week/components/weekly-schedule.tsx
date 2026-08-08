@@ -28,13 +28,15 @@ const WeeklySchedule = ({ isLoading: parentLoading }: WeeklyScheduleProps) => {
   // Update selected values when options load
   useEffect(() => {
     if (yearOptions?.length > 0) {
-      const defaultYear = yearOptions.find(o => o.selected)?.value || yearOptions[0].value;
-      setSelectedYear(defaultYear);
+      const selectedYearObj = yearOptions.find(o => o.selected);
+      const defaultYear = selectedYearObj ? selectedYearObj.value : yearOptions[yearOptions.length - 1]?.value || yearOptions[0].value;
+      if (defaultYear) setSelectedYear(defaultYear);
     }
 
     if (weekOptions?.length > 0) {
-      const defaultWeek = weekOptions.find(o => o.selected)?.value || weekOptions[0].value;
-      setSelectedWeek(defaultWeek);
+      const selectedWeekObj = weekOptions.find(o => o.selected);
+      const defaultWeek = selectedWeekObj ? selectedWeekObj.value : weekOptions[0].value;
+      if (defaultWeek) setSelectedWeek(defaultWeek);
     }
   }, [yearOptions, weekOptions]);
 

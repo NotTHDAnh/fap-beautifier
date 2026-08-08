@@ -45,9 +45,8 @@ const injectReactApp = () => {
       }
     }
 
-    // Thay thế trang với React root
-    document.body.classList.add('text-foreground', 'bg-background', 'flex', 'h-full', 'text-base', 'antialiased');
-    document.body.innerHTML = '<div class="flex grow" id="root"></div>';
+    document.body.classList.add('text-foreground', 'bg-background', 'flex', 'h-full', 'w-full', 'max-w-full', 'm-0', 'p-0', 'text-base', 'antialiased');
+    document.body.innerHTML = '<div class="flex grow w-full max-w-full" id="root"></div>';
 
     // Thiết lập nội dung head tối thiểu (React sẽ bổ sung)
     document.head.innerHTML = `
@@ -82,9 +81,9 @@ const injectReactApp = () => {
           </script>
       `;
 
-    console.log('FAP Beautifier: React app injected successfully');
+    console.log('dadx-custom-fap: React app injected successfully');
   } catch (error) {
-    console.error('FAP Beautifier: Error injecting React app', error);
+    console.error('dadx-custom-fap: Error injecting React app', error);
   }
 };
 
@@ -102,12 +101,12 @@ const initialize = async () => {
         // DOM đã tải xong, chèn ngay lập tức
         injectReactApp();
       }
-      console.log('FAP Beautifier: Extension is enabled');
+      console.log('dadx-custom-fap: Extension is enabled');
     } else {
-      console.log('FAP Beautifier: Extension is disabled');
+      console.log('dadx-custom-fap: Extension is disabled');
     }
   } catch (error) {
-    console.error('FAP Beautifier: Initialization error', error);
+    console.error('dadx-custom-fap: Initialization error', error);
   }
 };
 

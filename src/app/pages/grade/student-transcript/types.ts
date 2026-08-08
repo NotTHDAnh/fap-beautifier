@@ -9,6 +9,7 @@ export interface TranscriptCourse {
   replacedSubject: string;
   credit: number;
   grade: number;
+  grade4: number;
   status: TranscriptStatus;
 }
 
@@ -16,12 +17,14 @@ export interface GPAGroup {
   term: string;
   semester: { session: string; year: string };
   gpa: number;
+  gpa4: number;
   totalCredit: number;
   courses: TranscriptCourse[];
 }
 
 export interface TranscriptSummary {
   averageGPA: number;
+  averageGPA4: number;
   totalCredit: number;
   gpaList: GPAGroup[];
 } 

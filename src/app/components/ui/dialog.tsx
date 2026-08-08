@@ -7,12 +7,12 @@ import { X } from 'lucide-react';
 import { cn } from '@/app/lib/utils';
 
 const dialogContentVariants = cva(
-  'flex flex-col fixed outline-0 z-50 border border-border bg-background p-6 shadow-lg shadow-black/5 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-lg',
+  'flex flex-col fixed outline-0 z-50 border border-border bg-background p-6 shadow-2xl shadow-black/10 duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 rounded-2xl max-h-[92vh] overflow-y-auto',
   {
     variants: {
       variant: {
         default:
-          'left-[50%] top-[50%] max-w-lg translate-x-[-50%] translate-y-[-50%] w-full',
+          'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform max-w-lg w-[calc(100%-2rem)]',
         fullscreen: 'inset-5',
       },
     },
@@ -79,6 +79,7 @@ function DialogContent({
       {overlay && <DialogOverlay />}
       <DialogPrimitive.Content
         data-slot="dialog-content"
+        style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
         className={cn(dialogContentVariants({ variant }), className)}
         {...props}
       >

@@ -6,12 +6,13 @@ import { useIntl } from 'react-intl';
 
 interface TranscriptSummaryProps {
   averageGPA: number;
+  averageGPA4: number;
   totalCredit: number;
   nonGpaCodes: string[];
   setNonGpaCodes: (codes: string[]) => void;
 }
 
-export function TranscriptSummary({ averageGPA, totalCredit, nonGpaCodes, setNonGpaCodes }: TranscriptSummaryProps) {
+export function TranscriptSummary({ averageGPA, averageGPA4, totalCredit, nonGpaCodes, setNonGpaCodes }: TranscriptSummaryProps) {
   const [open, setOpen] = useState(false);
   const [codes, setCodes] = useState<string[]>(nonGpaCodes);
   const [input, setInput] = useState('');
@@ -38,10 +39,14 @@ export function TranscriptSummary({ averageGPA, totalCredit, nonGpaCodes, setNon
 
   return (
     <div className="mb-6 flex items-center justify-center relative">
-      <div className="flex flex-col md:flex-row md:items-center gap-6">
+      <div className="flex flex-col md:flex-row md:items-center gap-6 md:gap-10">
         <div className="text-center">
-          <div className="text-muted-foreground text-sm font-semibold">{intl.formatMessage({ id: 'TRANSCRIPT.SUMMARY.AVERAGE_GPA' })}</div>
+          <div className="text-muted-foreground text-sm font-semibold">{intl.formatMessage({ id: 'TRANSCRIPT.SUMMARY.AVERAGE_GPA_10' })}</div>
           <div className="text-3xl font-bold text-primary">{averageGPA.toFixed(2)}</div>
+        </div>
+        <div className="text-center">
+          <div className="text-muted-foreground text-sm font-semibold">{intl.formatMessage({ id: 'TRANSCRIPT.SUMMARY.AVERAGE_GPA_4' })}</div>
+          <div className="text-3xl font-bold text-green-700">{averageGPA4.toFixed(2)}</div>
         </div>
         <div className="text-center">
           <div className="text-muted-foreground text-sm font-semibold">{intl.formatMessage({ id: 'TRANSCRIPT.SUMMARY.TOTAL_CREDITS' })}</div>

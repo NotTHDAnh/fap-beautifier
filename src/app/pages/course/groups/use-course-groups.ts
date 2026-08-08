@@ -19,18 +19,24 @@ export const useCourseGroups = () => {
           const row = table.rows[i];
           
           if (row.cells.length >= 6) {
+            const rollNumber = row.cells[2].textContent?.trim() ?? '';
             const surname = row.cells[3].textContent?.trim() ?? '';
             const middleName = row.cells[4].textContent?.trim() ?? '';
             const givenName = row.cells[5].textContent?.trim() ?? '';
             const fullName = `${surname} ${middleName} ${givenName}`.trim();
             
+            // Check if there is an img tag in row cells or build standard FAP student avatar URL
+            const img = row.querySelector('img');
+            const avatarUrl = img?.src ? img.src : (rollNumber ? `https://fap.fpt.edu.vn/user/image.aspx?id=${rollNumber}` : undefined);
+
             members.push({
               id: i,
-              rollNumber: row.cells[2].textContent?.trim() ?? '',
+              rollNumber,
               surname,
               middleName,
               givenName,
-              fullName
+              fullName,
+              avatarUrl
             });
           }
         }

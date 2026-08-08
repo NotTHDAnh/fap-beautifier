@@ -3,15 +3,15 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/app/lib/utils';
 import { useSettings } from '@/app/providers/settings-provider';
 
-const containerVariants = cva('w-full mx-auto px-4 lg:px-6', {
+const containerVariants = cva('w-full max-w-full px-4 lg:px-6', {
   variants: {
     width: {
-      fixed: 'max-w-[1320px]',
-      fluid: '',
+      fixed: 'w-full max-w-full',
+      fluid: 'w-full max-w-full',
     },
   },
   defaultVariants: {
-    width: 'fixed',
+    width: 'fluid',
   },
 });
 

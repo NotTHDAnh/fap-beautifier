@@ -1,15 +1,15 @@
 import { Container } from '@/app/components/common/container';
-import { Card, CardContent, CardFooter, CardHeader, CardTable, CardTitle, CardToolbar } from '@/app/components/ui/card';
+import { Card, CardContent, CardHeader, CardTable, CardTitle, CardToolbar } from '@/app/components/ui/card';
 import { cn } from '@/app/lib/utils';
 import { useFapData } from '@/app/providers/fap-data-provider';
-import { BookOpenCheck, CalendarDays, CheckCircle, Clock, Code, GraduationCap, Loader2, Users } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { Loader2 } from 'lucide-react';
 import { TermSelector } from '../view-attend-student/components';
 import { useStudentGrade } from './use-student-grade';
-import { ScrollBar } from '@/app/components/ui/scroll-area';
-import { ScrollArea } from '@/app/components/ui/scroll-area';
+import { ScrollBar, ScrollArea } from '@/app/components/ui/scroll-area';
 import { Link } from 'react-router';
 import { useIntl } from 'react-intl';
+import { GradePieChart } from './components/GradePieChart';
+import { GradeCardsGrid } from './components/GradeCardsGrid';
 
 const StudentGradePage = () => {
   const intl = useIntl();
@@ -17,176 +17,167 @@ const StudentGradePage = () => {
     gradeData,
     activeTerm,
     activeCourse,
+    gradeComponents,
+    parsedGradeItems,
+    overallScore,
     result
   } = useStudentGrade();
 
-  useEffect(() => {
-    console.log(gradeData);
-  }, [gradeData]);
-
   const { loading } = useFapData();
 
+  const activeCourseObj = gradeData.courses.find((c) => c.active);
+
   return (
-    <Container>
-      {/* Term Selector */}
-      <div className="mb-5">
-        <TermSelector
-          terms={gradeData.terms}
-        />
+    <Container width="fluid" className="w-full max-w-full space-y-6">
+      {/* Term Selector Header */}
+      <div>
+        <TermSelector terms={gradeData.terms} />
       </div>
 
-      {/* Main Content Grid */}
-      <div className="grid gap-7 lg:grid-cols-3">
-        {/* Left Column - Course Selection */}
-        <div className="space-y-7">
-          {/* Course Selection */}
-          <Card className="relative">
-            <CardHeader className="py-2">
+      {/* Main Content Grid (100% Full Width) */}
+      <div className="grid gap-6 lg:grid-cols-3 w-full">
+        {/* Left Column - Course Selection List */}
+        <div className="space-y-6">
+          <Card className="relative rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs">
+            <CardHeader className="py-3 px-4 border-b border-slate-100 dark:border-slate-800">
               <CardTitle>
                 <div className="flex flex-col">
-                  <div className="flex items-center gap-2">
-                    <GraduationCap className="h-5 w-5 text-primary" />
-                    <span className="text-base font-semibold">
-                      {intl.formatMessage({ id: 'GRADE.COURSE_SELECTOR.TITLE' })}
-                    </span>
-                  </div>
-                  <span className="text-muted-foreground text-sm font-normal">
+                  <span className="text-base font-extrabold text-slate-900 dark:text-white">
+                    {intl.formatMessage({ id: 'GRADE.COURSE_SELECTOR.TITLE' })}
+                  </span>
+                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5">
                     {activeTerm}
                   </span>
                 </div>
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-4 pt-2 relative">
+            <CardContent className="p-4 relative">
               {loading && (
-                <div className="absolute inset-0 bg-background/70 flex items-center justify-center z-10 rounded-b-xl">
-                  <Loader2 className="h-6 w-6 text-primary animate-spin" />
+                <div className="absolute inset-0 bg-white/70 dark:bg-slate-900/70 flex items-center justify-center z-10 rounded-b-2xl">
+                  <Loader2 className="size-6 text-blue-600 animate-spin" />
                 </div>
               )}
-              <div>
-                {!loading && gradeData.courses.length === 0 && (
-                  <div className="flex flex-col items-center justify-center py-16 text-center">
-                    <GraduationCap className="h-10 w-10 text-muted-foreground mb-4 opacity-50" />
-                    <h3 className="text-lg font-medium text-foreground mb-1">{intl.formatMessage({ id: 'GRADE.COURSE_SELECTOR.EMPTY_TITLE' })}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {intl.formatMessage({ id: 'GRADE.COURSE_SELECTOR.EMPTY_MESSAGE' })}
-                    </p>
-                  </div>
-                )}
-                <div className="grid gap-3">
-                  {gradeData.courses.map((course, index) => (
-                    <Link
-                      key={index}
-                      to={course.link || '#'}
-                      onClick={(e) => {
-                        if (!course.link) {
-                          e.preventDefault();
-                        }
-                      }}
-                      className="block"
-                    >
-                      <div 
-                        className={cn(
-                          "relative rounded-lg overflow-hidden border transition-all duration-200",
-                          course.active 
-                            ? "border-primary bg-primary/5" 
-                            : "border-border hover:border-primary/30 hover:bg-muted/40"
-                        )}
-                      >
-                        {/* Left color bar indicator */}
-                        <div 
-                          className={cn(
-                            "absolute left-0 top-0 h-full w-1",
-                            course.active ? "bg-primary" : "bg-border"
-                          )}
-                        />
-                        
-                        {/* Course content */}
-                        <div className="pl-4 pr-3 py-2.5">
-                          {/* Top row with course code and status */}
-                          <div className="flex items-center justify-between mb-1.5">
-                            <div className="flex items-center gap-2">
-                              <Code className="h-3.5 w-3.5 text-primary" />
-                              <span className="text-xs font-semibold text-primary">
-                                {course.code}
-                              </span>
-                            </div>
-                            {course.active && (
-                              <span className="inline-flex items-center text-xs font-medium text-green-600">
-                                <CheckCircle className="h-3 w-3 mr-0.5" />
-                                {intl.formatMessage({ id: 'GRADE.COURSE_SELECTOR.ACTIVE_STATUS' })}
-                              </span>
-                            )}
-                          </div>
-                          
-                          {/* Course name */}
-                          <h4 className="text-sm font-medium leading-tight mb-2 line-clamp-1">
-                            {course.name}
-                          </h4>
-                          
-                          {/* Bottom row with metadata */}
-                          <div className="flex items-center text-xs text-muted-foreground gap-3">
-                            <span className="inline-flex items-center">
-                              <Users className="h-3 w-3 mr-1 flex-shrink-0" />
-                              <span className="truncate">{course.group}</span>
-                            </span>
-                            <span className="inline-flex items-center">
-                              <Clock className="h-3 w-3 mr-1 flex-shrink-0" />
-                              <span className="truncate">
-                                {course.date}
-                                {course.endDate && ` - ${course.endDate}`}
-                              </span>
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
+
+              {!loading && gradeData.courses.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-1">
+                    {intl.formatMessage({ id: 'GRADE.COURSE_SELECTOR.EMPTY_TITLE' })}
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    {intl.formatMessage({ id: 'GRADE.COURSE_SELECTOR.EMPTY_MESSAGE' })}
+                  </p>
                 </div>
+              )}
+
+              <div className="grid gap-2.5">
+                {gradeData.courses.map((course, index) => (
+                  <Link
+                    key={index}
+                    to={course.link || '#'}
+                    onClick={(e) => {
+                      if (!course.link) e.preventDefault();
+                    }}
+                    className="block"
+                  >
+                    <div
+                      className={cn(
+                        "relative rounded-xl border p-3 transition-all duration-200",
+                        course.active
+                          ? "border-blue-500 bg-blue-50/50 dark:bg-blue-950/40 font-semibold"
+                          : "border-slate-200/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-white dark:bg-slate-900"
+                      )}
+                    >
+                      {/* Active Indicator Bar */}
+                      {course.active && (
+                        <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-blue-600" />
+                      )}
+
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs font-black text-blue-600 dark:text-blue-400">
+                          {course.code}
+                        </span>
+                        {course.active && (
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500 text-white">
+                            {intl.formatMessage({ id: 'GRADE.COURSE_SELECTOR.ACTIVE_STATUS' })}
+                          </span>
+                        )}
+                      </div>
+
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-white leading-snug line-clamp-1 mb-1.5">
+                        {course.name}
+                      </h4>
+
+                      <div className="flex items-center text-[11px] text-slate-500 dark:text-slate-400 gap-2">
+                        <span className="font-medium">{course.group}</span>
+                        <span>•</span>
+                        <span className="truncate">
+                          {course.date}
+                          {course.endDate && ` - ${course.endDate}`}
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Right Column - Grade Report */}
-        <div className="lg:col-span-2">
-          <Card className="relative">
-            <CardHeader className="py-2">
+        {/* Right Column - Visual Combined Grade Dashboard */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* 🌟 1. Grade Metric Overview & Donut Chart */}
+          <GradePieChart
+            components={gradeComponents}
+            courseCode={activeCourseObj?.code || 'Môn học'}
+            overallScore={overallScore}
+            statusText={result}
+          />
+
+          {/* 📋 2. Visual Component Score Cards Grid with Progress Bars */}
+          <GradeCardsGrid items={parsedGradeItems} />
+
+          {/* 📊 3. Detailed Mark Report Table Card */}
+          <Card className="relative rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xs overflow-hidden">
+            <CardHeader className="py-3 px-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
               <CardTitle>
                 <div className="flex flex-col">
-                  <div className="flex items-center gap-2">
-                    <BookOpenCheck className="h-4 w-4 text-primary" />
-                    <span className="text-base font-semibold">
-                      {intl.formatMessage({ id: 'GRADE.REPORT.TITLE' })}
-                    </span>
-                  </div>
-                  <span className="text-muted-foreground text-sm font-normal">
+                  <span className="text-base font-black text-slate-900 dark:text-white">
+                    {intl.formatMessage({ id: 'GRADE.REPORT.TITLE' })}
+                  </span>
+                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 mt-0.5">
                     {activeCourse}
                   </span>
                 </div>
               </CardTitle>
               <CardToolbar>
                 {result && (
-                  <div className={cn(
-                    "text-2sm font-medium px-2 py-1 rounded-full",
-                    result === "Passed" ? "bg-green-100 text-green-700" :
-                    result === "Not Passed" ? "bg-red-100 text-red-700" :
-                    result === "Attendance Fail" ? "bg-red-100 text-red-700" :
-                    result === "Is Suspended" ? "bg-amber-100 text-amber-700" :
-                    "bg-gray-100 text-gray-700"
-                  )}>
+                  <span
+                    className={cn(
+                      "text-xs font-extrabold px-3 py-1 rounded-full shadow-2xs",
+                      result === "Passed" ? "bg-emerald-500 text-white" :
+                      result === "Not Passed" ? "bg-rose-500 text-white" :
+                      result === "Attendance Fail" ? "bg-rose-500 text-white" :
+                      result === "Is Suspended" ? "bg-amber-500 text-white" :
+                      "bg-slate-200 text-slate-800"
+                    )}
+                  >
                     {result}
-                  </div>
+                  </span>
                 )}
               </CardToolbar>
             </CardHeader>
-            <CardTable className="relative">
+
+            <CardTable className="relative p-0">
               {loading && (
-                <div className="absolute inset-0 bg-background/70 flex items-center justify-center z-10 rounded-b-xl">
-                  <Loader2 className="h-6 w-6 text-primary animate-spin" />
+                <div className="absolute inset-0 bg-white/70 dark:bg-slate-900/70 flex items-center justify-center z-10">
+                  <Loader2 className="size-6 text-blue-600 animate-spin" />
                 </div>
               )}
-              <ScrollArea>
-                <div dangerouslySetInnerHTML={{ __html: gradeData.markTable }} />
+              <ScrollArea className="w-full">
+                <div
+                  className="p-4 overflow-x-auto text-xs sm:text-sm"
+                  dangerouslySetInnerHTML={{ __html: gradeData.markTable }}
+                />
                 <ScrollBar orientation="horizontal" />
               </ScrollArea>
             </CardTable>
@@ -197,4 +188,4 @@ const StudentGradePage = () => {
   );
 };
 
-export { StudentGradePage }; 
+export { StudentGradePage };

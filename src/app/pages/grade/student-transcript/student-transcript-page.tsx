@@ -4,7 +4,7 @@ import { TranscriptTable } from './components/transcript-table';
 import { Container } from '@/app/components/common/container';
 
 const StudentTranscriptPage = () => {
-  const { gpaList, averageGPA, totalCredit, nonGpaCodes, setNonGpaCodes } = useStudentTranscript();
+  const { gpaList, averageGPA, averageGPA4, totalCredit, nonGpaCodes, setNonGpaCodes } = useStudentTranscript();
 
   // TODO: Thêm loading state nếu cần
 
@@ -12,6 +12,7 @@ const StudentTranscriptPage = () => {
     <Container>
       <TranscriptSummary
         averageGPA={averageGPA}
+        averageGPA4={averageGPA4}
         totalCredit={totalCredit}
         nonGpaCodes={nonGpaCodes}
         setNonGpaCodes={setNonGpaCodes}

@@ -62,6 +62,18 @@ function getStoredNonGpaCodes(): string[] {
   return DEFAULT_NON_GPA_CODES;
 }
 
+export function gradeToScale4(grade: number): number {
+  if (!grade || isNaN(grade) || grade < 0) return 0;
+  if (grade >= 8.5) return 4.0;
+  if (grade >= 8.0) return 3.5;
+  if (grade >= 7.0) return 3.0;
+  if (grade >= 6.5) return 2.5;
+  if (grade >= 5.5) return 2.0;
+  if (grade >= 5.0) return 1.5;
+  if (grade >= 4.0) return 1.0;
+  return 0.0;
+}
+
 export function useStudentTranscript() {
   const { transcripts } = useFapDataCustom({
     transcripts: parseTranscripts,
@@ -81,22 +93,32 @@ export function useStudentTranscript() {
     const gpaMap: Record<string, GPAGroup> = {};
     transcripts.forEach((t) => {
       const key = t.term;
-      const isExcluded = nonGpaCodes.some((code) => t.subjectCode.includes(code)) || t.credit === 0 || t.status === 'Not included in GPA';
+      const isExcluded =
+        nonGpaCodes.some((code) => t.subjectCode.includes(code)) ||
+        t.credit === 0 ||
+        t.status === 'Not included in GPA' ||
+        t.status === 'Studying' ||
+        t.status === 'Not started' ||
+        isNaN(t.grade) ||
+        (!t.grade && t.status !== 'Passed' && t.status !== 'Not passed' && t.status !== 'Attendance Fail');
       const realCredit = isExcluded ? 0 : t.credit;
+      const grade4 = gradeToScale4(t.grade);
       if (!gpaMap[key]) {
         gpaMap[key] = {
           term: t.term,
           semester: t.semester,
           gpa: 0,
+          gpa4: 0,
           totalCredit: 0,
           courses: [],
         };
       }
-      gpaMap[key].courses.push({ ...t, credit: realCredit });
+      gpaMap[key].courses.push({ ...t, credit: realCredit, grade4 });
     });
     Object.values(gpaMap).forEach((gpa) => {
       gpa.totalCredit = gpa.courses.reduce((acc, c) => acc + c.credit, 0);
       gpa.gpa = gpa.totalCredit > 0 ? gpa.courses.reduce((acc, c) => acc + c.credit * c.grade, 0) / gpa.totalCredit : 0;
+      gpa.gpa4 = gpa.totalCredit > 0 ? gpa.courses.reduce((acc, c) => acc + c.credit * c.grade4, 0) / gpa.totalCredit : 0;
     });
     return Object.values(gpaMap);
   }, [transcripts, nonGpaCodes]);
@@ -107,5 +129,10 @@ export function useStudentTranscript() {
     return totalCredit > 0 ? totalGPA / totalCredit : 0;
   }, [gpaList, totalCredit]);
 
-  return { transcripts, gpaList, averageGPA, totalCredit, nonGpaCodes, setNonGpaCodes };
+  const averageGPA4 = useMemo(() => {
+    const totalGPA4 = gpaList.reduce((acc, g) => acc + g.gpa4 * g.totalCredit, 0);
+    return totalCredit > 0 ? totalGPA4 / totalCredit : 0;
+  }, [gpaList, totalCredit]);
+
+  return { transcripts, gpaList, averageGPA, averageGPA4, totalCredit, nonGpaCodes, setNonGpaCodes };
 } 

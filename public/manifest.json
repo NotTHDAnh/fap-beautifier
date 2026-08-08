@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "FAP Beautifier",
+  "name": "dadx-custom-fap",
   "version": "2.0.3",
-  "description": "FPT University Academic Portal Beautifier",
+  "description": "DADX Custom FAP - Extension custom giao diện FPT Academic Portal",
   "permissions": ["activeTab", "scripting", "identity", "storage"],
   "background": {
     "service_worker": "background.js"

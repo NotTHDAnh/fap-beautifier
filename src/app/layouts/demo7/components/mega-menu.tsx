@@ -37,7 +37,7 @@ export function MegaMenu() {
   const intl = useIntl();
 
   return (
-    <NavigationMenu>
+    <NavigationMenu viewport={false}>
       <NavigationMenuList className="gap-7.5">
         {/* Home Item */}
         <NavigationMenuItem>

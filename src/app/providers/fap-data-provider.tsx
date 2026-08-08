@@ -183,14 +183,19 @@ function useFapDataSelector(selector: { [key: string]: string }) {
   const { getData } = useFapData();
 
   const result: { [key: string]: string } = {};
-  Object.keys(selector).forEach((key) => {
-    const value = selector[key];
-    const selectedElement = getData()?.querySelector(value);
-    result[key] =
-      selectedElement instanceof HTMLElement
-        ? selectedElement.innerText.trim()
-        : "";
-  });
+  try {
+    const doc = getData();
+    Object.keys(selector).forEach((key) => {
+      const value = selector[key];
+      const selectedElement = doc?.querySelector ? doc.querySelector(value) : null;
+      result[key] =
+        selectedElement instanceof HTMLElement
+          ? selectedElement.innerText.trim()
+          : selectedElement?.textContent?.trim() || "";
+    });
+  } catch (err) {
+    console.error("useFapDataSelector error:", err);
+  }
 
   return result;
 }
@@ -201,8 +206,14 @@ function useFapDataCustom<
   const { getData } = useFapData();
 
   const result: any = {};
+  const doc = getData();
   Object.keys(selector).forEach((key) => {
-    result[key] = selector[key](getData()) ?? undefined;
+    try {
+      result[key] = selector[key](doc) ?? undefined;
+    } catch (err) {
+      console.error(`useFapDataCustom error on selector "${key}":`, err);
+      result[key] = undefined;
+    }
   });
 
   return result;

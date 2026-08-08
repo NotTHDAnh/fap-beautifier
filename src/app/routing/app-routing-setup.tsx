@@ -25,6 +25,7 @@ export function AppRoutingSetup() {
   return (
     <Routes>
       <Route element={<Demo7Layout />}>
+        <Route path="/" element={<DashboardPage />} />
         <Route path="/Student.aspx" element={<DashboardPage />} />
         <Route path="/Report/ScheduleOfWeek.aspx" element={<ScheduleOfWeekPage />} />
         <Route path="/Report/ViewAttendstudent.aspx" element={<ViewAttendStudentPage />} />
@@ -38,6 +39,7 @@ export function AppRoutingSetup() {
         <Route path="/User/Profile.aspx" element={<UserProfilePage />} />
         <Route path="/User/verProfile.aspx" element={<UpdateProfilePage />} />
         <Route path="/Course/Groups.aspx" element={<CourseGroupsPage />} />
+        <Route path="/Course/Courses.aspx" element={<CourseGroupsPage />} />
         <Route path="/Schedule/ActivityStudent.aspx" element={<ActivityStudentPage />} />
         <Route path="/CmsFAP/News.aspx" element={<NewsPage />} />
         <Route path="/CmsFAP/PlusNews.aspx" element={<NewsPage />} />
@@ -47,7 +49,6 @@ export function AppRoutingSetup() {
       </Route>
 
       <Route element={<BrandedLayout />}>
-        <Route path="/" element={<LoginPage />} />
         <Route path="/Default.aspx" element={<LoginPage />} />
       </Route>
       <Route path="error/*" element={<ErrorRouting />} />

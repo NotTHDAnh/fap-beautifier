@@ -48,11 +48,17 @@ export function TranscriptTable({ gpaList }: TranscriptTableProps) {
               {intl.formatMessage({ id: 'TRANSCRIPT.TERM' })} {gpa.term} - {intl.formatMessage({ id: 'TRANSCRIPT.SESSION' }, { session: gpa.semester.session, year: gpa.semester.year })}
             </CardTitle>
             <CardToolbar>
-              <div className="flex gap-6 text-xs md:text-sm">
+              <div className="flex gap-4 md:gap-6 text-xs md:text-sm">
                 <span>
-                  {intl.formatMessage({ id: 'TRANSCRIPT.STATS.AVG' })}{' '}
+                  {intl.formatMessage({ id: 'TRANSCRIPT.STATS.AVG_10' })}{' '}
                   <span className="font-bold text-green-700">
                     {gpa.gpa.toFixed(2)}
+                  </span>
+                </span>
+                <span>
+                  {intl.formatMessage({ id: 'TRANSCRIPT.STATS.AVG_4' })}{' '}
+                  <span className="font-bold text-green-700">
+                    {gpa.gpa4.toFixed(2)}
                   </span>
                 </span>
                 <span>
@@ -80,7 +86,10 @@ export function TranscriptTable({ gpaList }: TranscriptTableProps) {
                       {intl.formatMessage({ id: 'TRANSCRIPT.TABLE.CREDIT' })}
                     </TableHead>
                     <TableHead className="min-w-16 h-10 text-center">
-                      {intl.formatMessage({ id: 'TRANSCRIPT.TABLE.GRADE' })}
+                      {intl.formatMessage({ id: 'TRANSCRIPT.TABLE.GRADE_10' })}
+                    </TableHead>
+                    <TableHead className="min-w-16 h-10 text-center">
+                      {intl.formatMessage({ id: 'TRANSCRIPT.TABLE.GRADE_4' })}
                     </TableHead>
                     <TableHead className="min-w-28 h-10 text-center">
                       {intl.formatMessage({ id: 'TRANSCRIPT.TABLE.STATUS' })}
@@ -114,6 +123,9 @@ export function TranscriptTable({ gpaList }: TranscriptTableProps) {
                       </TableCell>
                       <TableCell className="py-2 text-sm text-center">
                         {course.grade > 0 ? course.grade.toFixed(1) : '-'}
+                      </TableCell>
+                      <TableCell className="py-2 text-sm text-center font-medium">
+                        {course.grade > 0 ? course.grade4.toFixed(1) : '-'}
                       </TableCell>
                       <TableCell className="py-2 text-sm text-center">
                         <TranscriptStatusBadge status={course.status} />

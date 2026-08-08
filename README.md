@@ -1,10 +1,10 @@
-# FAP Beautifier - Chrome Extension
+# dadx-custom-fap - Chrome Extension
 
 A modern UI enhancement for the FPT University Academic Portal.
 
 ## Overview
 
-FAP Beautifier transforms the original FPT Academic Portal interface into a modern, responsive design while preserving all functionality. This Chrome extension works by capturing the original page content, extracting the data, and rendering a beautiful new interface using React.
+dadx-custom-fap transforms the original FPT Academic Portal interface into a modern, responsive design while preserving all functionality. This Chrome extension works by capturing the original page content, extracting the data, and rendering a beautiful new interface using React.
 
 ## Features
 

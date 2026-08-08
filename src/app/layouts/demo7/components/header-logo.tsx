@@ -40,9 +40,14 @@ const HeaderLogo = () => {
           />
         </Link>
 
-        <h3 className="text-mono text-lg font-medium hidden lg:block">
-          Academic Portal
-        </h3>
+        <div className="hidden lg:flex items-center gap-2">
+          <h3 className="text-slate-900 dark:text-white text-lg font-black tracking-tight">
+            Academic Portal
+          </h3>
+          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-900">
+            PRO
+          </span>
+        </div>
       </div>
 
       {!isMobile ? (

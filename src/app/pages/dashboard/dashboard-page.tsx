@@ -1,5 +1,4 @@
 import { Container } from '@/app/components/common/container';
-import { ApplicationDeadline } from './components/ApplicationDeadline';
 import { MainMenu } from './components/MainMenu';
 import { TuitionAlert } from './components/TuitionAlert';
 import { FeedbackNotification } from './components/FeedbackNotification';
@@ -9,30 +8,24 @@ const DashboardPage = () => {
   const { isRequireFeedback, tuitionContent, accountBalance } = useDashboard();
 
   return (
-    <Container>
+    <Container width="fluid" className="w-full max-w-full p-0">
       <FeedbackNotification isVisible={!!isRequireFeedback} />
       
       {!isRequireFeedback && (
-        <>
+        <div className="space-y-6 w-full">
           <TuitionAlert 
             tuitionContent={tuitionContent || undefined} 
             accountBalance={accountBalance || undefined} 
+            className="w-full"
           />
           
-          <div className="grid gap-5 lg:gap-7.5">
-            <div className="grid lg:grid-cols-3 gap-y-5 lg:gap-7.5">
-              <div className="lg:col-span-1">
-                <ApplicationDeadline />
-              </div>
-              <div className="lg:col-span-2">
-                <MainMenu />
-              </div>
-            </div>
+          <div className="w-full">
+            <MainMenu />
           </div>
-        </>
+        </div>
       )}
     </Container>
-  )
+  );
 };
 
 export { DashboardPage };

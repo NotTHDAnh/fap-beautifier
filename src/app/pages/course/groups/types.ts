@@ -5,6 +5,7 @@ export interface GroupMember {
   middleName: string;
   givenName: string;
   fullName: string;
+  avatarUrl?: string;
 }
 
 export interface GroupData {
