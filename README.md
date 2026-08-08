@@ -1,4 +1,4 @@
-# dadx-custom-fap - Chrome Extension
+# dadx-custom-fap - Chrome Extension (fork from hieuvume/fap-beautifier)
 
 A modern UI enhancement for the FPT University Academic Portal.
 
